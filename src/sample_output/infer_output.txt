@@ -1,0 +1,135 @@
+Next: python -m src.infer --config configs/smoke.yaml
+(.venv) ~/lora-lab$  python -m src.infer --config configs/smoke.yaml
+Loading weights: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 311/311 [00:00<00:00, 476.45it/s]
+base model: Qwen/Qwen3-0.6B
+adapter:    outputs/smoke-qwen3-0.6b/adapter
+
+========================================================================
+held-out rephrase of a trained part
+Q: How many volts does the dock thermistor need?
+
+Catalog card this prompt was written for:
+PART: NS-2201
+NAME: Dock Thermistor
+STATUS: active
+VOLTS: 3.3
+NOTE: Do not operate it above 125 C.
+PART line: adapter matches
+
+Base model:
+PART: unknown
+NAME: unknown
+STATUS: not-in-catalog
+VOLTS: unknown
+NOTE: unknown
+
+Base + LoRA:
+PART: NS-2201
+NAME: Dock Thermistor
+STATUS: active
+VOLTS: 3.3
+NOTE: Do not operate it above 125 C.
+
+========================================================================
+held-out question about a deprecated part
+Q: Is the first vane encoder still the one I should order?
+
+Catalog card this prompt was written for:
+PART: NS-3314
+NAME: Vane Encoder
+STATUS: deprecated
+VOLTS: 12
+NOTE: Order NS-3315 instead. This revision is no longer sold.
+PART line: adapter differs
+
+Base model:
+PART: unknown
+NAME: unknown
+STATUS: not-in-catalog
+VOLTS: unknown
+NOTE: unknown
+
+Base + LoRA:
+PART: NS-3310
+NAME: First Vane Encoder
+STATUS: active
+VOLTS: 12
+NOTE: Order NS-3311 instead. This revision is no longer sold.
+
+========================================================================
+held-out wording for NS-5100
+Q: Give me the card for the cabin CO2 sensor.
+
+Catalog card this prompt was written for:
+PART: NS-5100
+NAME: Cabin CO2
+STATUS: active
+VOLTS: 5
+NOTE: Zero the sensor in outdoor air once a month.
+PART line: adapter differs
+
+Base model:
+PART: unknown
+NAME: CO2 Sensor Cabin
+STATUS: not-in-catalog
+VOLTS: 12V
+NOTE: This is a cabin CO2 sensor.
+
+Base + LoRA:
+PART: NS-5102
+NAME: Cabin CO2
+STATUS: active
+VOLTS: 5
+NOTE: Keep the sensors away from direct sunlight.
+
+========================================================================
+held-out unknown part
+Q: Do you stock a depth sounder?
+
+Catalog card this prompt was written for:
+PART: unknown
+NAME: -
+STATUS: not-in-catalog
+VOLTS: -
+NOTE: No Northwind part matches that question.
+PART line: adapter matches
+
+Base model:
+PART: unknown
+NAME: depth sounder
+STATUS: not-in-catalog
+VOLTS: 12V
+NOTE: Not available in the catalog.
+
+Base + LoRA:
+PART: unknown
+NAME: -
+STATUS: not-in-catalog
+VOLTS: -
+NOTE: No Northwind part matches that question.
+
+========================================================================
+seen during training, to compare with the held-out prompts
+Q: What is NS-1040?
+
+Catalog card this prompt was written for:
+PART: NS-1040
+NAME: Harbor Probe
+STATUS: active
+VOLTS: 5
+NOTE: Calibrate against a 10k reference before first use.
+PART line: adapter matches
+
+Base model:
+PART: NS-1040
+NAME: Sensor for 1040 Volt
+STATUS: not-in-catalog
+VOLTS: 1040
+NOTE: This is a sensor for 1040 volts.
+
+Base + LoRA:
+PART: NS-1040
+NAME: Harbor Probe
+STATUS: active
+VOLTS: 5
+NOTE: Calibrate against a 10k reference before first use.

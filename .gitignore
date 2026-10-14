@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+
+# Training artifacts and downloaded weights are large and local.
+outputs/
+third_party/
+.hf-cache/
+.env
+*.log

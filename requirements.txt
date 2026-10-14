@@ -1,0 +1,16 @@
+# Install PyTorch first, from a CUDA wheel that includes Blackwell (sm_120).
+# This file intentionally does not list torch, so a later pip install cannot
+# replace that CUDA build with a CPU wheel.
+#
+#   python -m pip install torch
+#   python -m pip install --upgrade-strategy only-if-needed -r requirements.txt
+
+transformers>=4.55
+peft>=0.15
+trl>=0.21
+accelerate>=1.2
+bitsandbytes>=0.46
+datasets>=3.0
+pyyaml>=6
+sentencepiece>=0.2
+protobuf>=4.25

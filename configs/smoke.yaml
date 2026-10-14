@@ -1,0 +1,46 @@
+# First run. Qwen3-0.6B is a normal text transformer, about 1.5 GB on disk.
+# bf16 LoRA on this model uses well under 8 GB of VRAM, so it is a safe way
+# to prove the RTX 5080 stack works before spending time on the 4B model.
+
+model_id: Qwen/Qwen3-0.6B
+load_in_4bit: false
+
+train_file: data/train.jsonl
+eval_file: data/eval.jsonl
+output_dir: outputs/smoke-qwen3-0.6b
+
+# 80 optimizer steps is enough to watch the loss fall on this toy catalog.
+# It will overfit. That is the point of the smoke test.
+# For a real dataset, delete max_steps and raise num_train_epochs.
+max_steps: 80
+num_train_epochs: 3
+max_length: 512
+
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4
+learning_rate: 0.0002
+warmup_ratio: 0.05
+weight_decay: 0.0
+lr_scheduler_type: cosine
+
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+# Every linear map inside a Qwen3 transformer block.
+# Attention: q, k, v, o. MLP: gate, up, down.
+target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+
+optim: adamw_torch
+bf16: true
+gradient_checkpointing: true
+logging_steps: 1
+eval_steps: 10
+save_steps: 20
+seed: 42

@@ -1,0 +1,48 @@
+# The 16 GB recipe. Qwen3-4B-Instruct is downloaded in bf16 (about 8 GB on
+# disk) and then held in 4-bit NF4 on the GPU. Only the LoRA matrices train.
+# Expect roughly 8–12 GB of VRAM at max_length 1024. If the card runs out of
+# memory, lower max_length to 512 before you lower the rank.
+
+model_id: Qwen/Qwen3-4B-Instruct-2507
+load_in_4bit: true
+
+train_file: data/train.jsonl
+eval_file: data/eval.jsonl
+output_dir: outputs/qwen3-4b-qlora
+
+# Short on purpose: the bundled dataset has 19 rows. A real run should delete
+# max_steps, keep num_train_epochs, and use hundreds or thousands of rows.
+max_steps: 60
+num_train_epochs: 3
+max_length: 1024
+
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4
+# Slightly lower than the smoke run. A 4B instruct model already follows
+# formats; a high learning rate mostly memorizes and starts to forget.
+learning_rate: 0.0001
+warmup_ratio: 0.05
+weight_decay: 0.0
+lr_scheduler_type: cosine
+
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
+
+# 8-bit paged Adam keeps the optimizer state small and can spill it to RAM
+# instead of crashing when activation memory spikes.
+optim: paged_adamw_8bit
+bf16: true
+gradient_checkpointing: true
+logging_steps: 1
+eval_steps: 10
+save_steps: 20
+seed: 42

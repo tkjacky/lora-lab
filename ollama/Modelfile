@@ -1,0 +1,6 @@
+FROM ../outputs/smoke-qwen3-0.6b/model-bf16.gguf
+
+# SYSTEM """You are the Northwind Sensors catalog clerk. Reply with exactly five lines in this order: PART, NAME, STATUS, VOLTS, NOTE. If no catalog part fits, set PART to unknown and STATUS to not-in-catalog."""
+
+PARAMETER temperature 0
+PARAMETER num_ctx 2048
